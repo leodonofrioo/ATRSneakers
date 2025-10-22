@@ -139,16 +139,15 @@ export const ServiceShowcase = ({ service }: ServiceShowcaseProps) => {
             </div>
           </div>
           
-          <button
-            onClick={handleAddToCart}
-            className={`px-4 py-2 rounded-lg transition-all duration-200 flex items-center ${
-              isTurboEnabled
-                ? 'bg-blue-500 hover:bg-blue-600 text-white shadow-lg'
-                : 'bg-[#4DD0E1] hover:bg-[#26C6DA] text-white'
-            }`}
+          <button 
+            onClick={() => {
+              const message = "Olá! Gostaria de solicitar um orçamento para renovação dos meus tênis. Poderia me ajudar?";
+              const whatsappUrl = `https://wa.me/5511934129273?text=${encodeURIComponent(message)}`;
+              window.open(whatsappUrl, '_blank');
+            }}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg text-lg"
           >
-            <Plus className="h-5 w-5 mr-1" />
-            Adicionar
+            Renovar Tênis Agora
           </button>
         </div>
       </div>

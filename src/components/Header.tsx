@@ -1,49 +1,56 @@
-import { TurboToggle } from './TurboToggle';
+import { useState } from 'react';
 
 export const Header = () => {
+  const [logoSrc, setLogoSrc] = useState('/Logo ATR.svg');
+  const [logoError, setLogoError] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+
+  const handleLogoError = () => {
+    console.log('Logo error for path:', logoSrc);
+    
+    if (logoSrc === '/Logo ATR.svg') {
+      console.log('Trying /public/Logo ATR.svg');
+      setLogoSrc('/public/Logo ATR.svg');
+    } else if (logoSrc === '/public/Logo ATR.svg') {
+      console.log('Trying ./Logo ATR.svg');
+      setLogoSrc('./Logo ATR.svg');
+    } else if (logoSrc === './Logo ATR.svg') {
+      console.log('Trying ./public/Logo ATR.svg');
+      setLogoSrc('./public/Logo ATR.svg');
+    } else {
+      console.log('All logo paths failed, using text fallback');
+      setLogoError(true);
+    }
+  };
+
+  const handleLogoLoad = () => {
+    console.log('Logo loaded successfully:', logoSrc);
+    setLogoLoaded(true);
+  };
+
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Layout Mobile: Logo à esquerda, Turbo à direita */}
-        <div className="flex justify-between items-center h-32 md:hidden">
-          {/* Logo à esquerda no mobile */}
-          <div className="flex items-center">
-            <img 
-              src="/Logo ATR.svg" 
-              alt="ATR Sneakers" 
-              className="h-20 w-auto"
-            />
+    <header className="bg-gradient-to-b from-white to-white/0 min-h-[120px] max-h-[200px] h-[clamp(120px,16vw,200px)] flex items-center justify-center px-4">
+      {/* Apenas o logo centralizado */}
+      <div className="flex items-center justify-center">
+        {!logoError ? (
+          <img 
+            src={logoSrc}
+            alt="ATR Logo" 
+            className={`h-32 w-auto transition-all duration-300 ${
+              logoLoaded ? 'opacity-100' : 'opacity-0'
+            } filter brightness-110 contrast-110 drop-shadow-sm hover:drop-shadow-md`}
+            style={{
+              filter: 'brightness(1.1) contrast(1.1) drop-shadow(0 1px 2px rgba(0,0,0,0.1))',
+              WebkitFilter: 'brightness(1.1) contrast(1.1) drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
+            }}
+            onError={handleLogoError}
+            onLoad={handleLogoLoad}
+          />
+        ) : (
+          <div className="h-32 flex items-center justify-center px-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-4xl rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+            ATR
           </div>
-
-          {/* Turbo Toggle à direita no mobile */}
-          <div className="flex items-center">
-            <TurboToggle />
-          </div>
-        </div>
-
-        {/* Layout Desktop: Logo centralizado */}
-        <div className="hidden md:flex justify-between items-center h-32">
-          {/* Espaço à esquerda para balanceamento */}
-          <div className="flex items-center gap-4 w-48">
-            {/* Espaço vazio para balancear o layout */}
-          </div>
-
-          {/* Logo Centralizado no desktop */}
-          <div className="flex-1 flex justify-center">
-            <div className="flex items-center">
-              <img 
-                src="/Logo ATR.svg" 
-                alt="ATR Sneakers" 
-                className="h-32 w-auto"
-              />
-            </div>
-          </div>
-
-          {/* Controles à direita no desktop */}
-          <div className="flex items-center gap-4 w-48 justify-end">
-            <TurboToggle />
-          </div>
-        </div>
+        )}
       </div>
     </header>
   );
